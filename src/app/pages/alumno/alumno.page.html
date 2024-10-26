@@ -1,0 +1,20 @@
+<app-cabecera id="header"></app-cabecera>
+<ion-content>
+  <ion-toolbar color="transparent" translucent>
+    <h1 style="text-align: center;">Asignaturas</h1>
+    <p style="text-align: center; margin: 0 20px 0 20px;">presiona una asignatura para escanear el codigo QR</p>
+  </ion-toolbar>
+
+
+  <ion-list [inset]="true">
+    <ion-item *ngFor="let asignatura of asignaturas" [button]="true" color="light">
+      <div id="container">
+        <div id="nombre">
+          {{ asignatura.nombre }} - {{ asignatura.id }}
+        </div>
+      </div>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
+<app-pie id="footer"></app-pie>

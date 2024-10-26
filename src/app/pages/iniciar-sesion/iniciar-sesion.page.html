@@ -1,0 +1,23 @@
+<app-cabecera></app-cabecera>
+<ion-content>
+  @if (cargando) {
+    <ion-progress-bar type="indeterminate"></ion-progress-bar>
+  }
+
+  <h1 style="text-align: center">Iniciar Sesión</h1>
+
+  <ion-list [inset]="true">
+    <ion-item color="light">
+      <ion-input [(ngModel)]="usuario" type="text" label="Usuario: " labelPlacement="floating" [clearInput]="true" placeholder="Ingrese su usuario"></ion-input>
+    </ion-item>
+    <ion-item color="light">
+      <ion-input [(ngModel)]="contra" type="password" label="Contraseña: " labelPlacement="floating" [clearInput]="true" [clearOnEdit]="false" placeholder="Ingrese su contraseña"></ion-input>
+    </ion-item>
+  </ion-list>
+
+  <div class="ion-text-center">
+    <ion-button (click)="inicioSesion(usuario, contra)" size="default" fill="outline" shape="round" [disabled]="!usuario || !contra">Iniciar Sesión</ion-button>
+  </div>
+
+</ion-content>
+<app-pie></app-pie>

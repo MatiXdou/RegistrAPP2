@@ -1,0 +1,39 @@
+<app-cabecera></app-cabecera>
+<ion-content>
+  @if (cargando) {
+    <ion-progress-bar type="indeterminate"></ion-progress-bar>
+  }
+
+  <h1 style="text-align: center;">Registrarse</h1>
+
+  <ion-list [inset]="true">
+    <ion-item color="light">
+      <ion-input [(ngModel)]="usuario" label="Usuario:" labelPlacement="floating" [clearInput]="true" placeholder="Ingrese su usuario"></ion-input>
+    </ion-item>
+
+    <ion-item color="light">
+      <ion-input [(ngModel)]="contra" label="Contraseña:" labelPlacement="floating" [clearInput]="true" [clearOnEdit]="false" placeholder="Ingrese su contraseña" type="password"></ion-input>
+    </ion-item>
+
+    <ion-item color="light">
+      <ion-input [(ngModel)]="nombreCompleto"  label="Nombre Completo:" labelPlacement="floating" [clearInput]="true" placeholder="Ingrese su nombre completo"></ion-input>
+    </ion-item>
+
+    <ion-item color="light">
+      <ion-input [(ngModel)]="telefono"  label="Telefono:" labelPlacement="floating" [clearInput]="true" placeholder="Ingrese su telefono"></ion-input>
+    </ion-item>
+
+    <ion-item color="light">
+      <ion-select [(ngModel)]="rol" label="Rol:" labelPlacement="floating">
+        <ion-select-option value="docente" color="light">Docente</ion-select-option>
+        <ion-select-option value="alumno">Alumno</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <div class="ion-text-center">
+    <ion-button (click)="registrar()" fill="outline" shape="round" [disabled]="!usuario || !contra || !nombreCompleto || !telefono || !rol">Registrarse</ion-button>
+  </div>
+
+</ion-content>
+<app-pie></app-pie>

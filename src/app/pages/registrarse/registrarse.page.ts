@@ -1,7 +1,9 @@
+import { FirestoreService } from './../../firebase/firestore.service';
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { AuthService } from 'src/app/servicios/auth.service';
+import { AuthService } from 'src/app/firebase/auth.service';
+import { User } from 'src/app/models/User.models';
 
 @Component({
   selector: 'app-registrarse',
@@ -9,65 +11,58 @@ import { AuthService } from 'src/app/servicios/auth.service';
   styleUrls: ['./registrarse.page.scss'],
 })
 export class RegistrarsePage implements OnInit {
-  usuario: string = '';
-  contra: string = '';
-  nombreCompleto: string = '';
-  telefono: string = '';
-  rol: string = 'alumno';
+  userData: User = {
+    name: '',
+    email: '',
+    phone: '',
+    rol: 'alumno'
+  };
 
+  error: string = ''
+  password: string = '';
   cargando: boolean = false;
   mensaje: string = '';
 
-  private authService = inject(AuthService);
   private alertController = inject(AlertController);
-  private router = inject(Router);
 
-  async registrar() {
-    this.mensaje = '';
-    this.cargando = true;
-    const existeUsuario = await this.validarUsuario(this.usuario);
-
-    if (existeUsuario) {
-      this.cargando = false;
-      this.mensaje = 'Nombre de usuario en uso. Elija otro.';
-      await this.mostrarMensaje('Error', this.mensaje);
-      return;
-    }
-
-    const usuarioNuevo = {
-      user: this.usuario,
-      pass: this.contra,
-      name: this.nombreCompleto,
-      phone: this.telefono,
-      rol: this.rol
-    };
-
-    try {
-      await this.authService.registrarUsuario(usuarioNuevo);
-      this.usuario = '';
-      this.contra = '';
-      this.nombreCompleto = '';
-      this.telefono = '';
-      this.rol = 'alumno';
-      this.cargando = false;
-      this.mensaje = 'Usuario registrado de manera exitosa.';
-      await this.mostrarMensaje('Éxito', this.mensaje);
-      this.router.navigate(['/iniciar-sesion']);
-    } catch (error) {
-      this.cargando = false;
-      this.mensaje = 'Error al registrar. Inténtalo nuevamente.';
-      await this.mostrarMensaje('Error', this.mensaje);
-    }
+  constructor(
+    private authService: AuthService,
+    private firestoreService: FirestoreService,
+    private router: Router
+  ) {
+    this.error = '';
   }
 
-  async validarUsuario(usuario: string): Promise<boolean> {
+  ngOnInit() { }
+
+  async register() {
     try {
-      const usuariosExistentes = await this.authService.analizaUsuario();
-      return usuariosExistentes.some(u => u.user === usuario);
+      this.cargando = true;
+      const userCredential = await this.authService.register(this.userData.email, this.password);
+      const uid = userCredential.user?.uid;
+      if(uid) {
+        const { name, email, phone, rol } = this.userData;
+        await this.firestoreService.createUser(uid, { name, email, phone, rol });
+        this.cargando = false;
+
+        this.userData = { name: '', email: '', phone: '', rol: 'alumno' };
+        this.password = '';
+
+        this.mensaje = 'Registrado exitosamente.';
+        await this.mostrarMensaje('Exito', this.mensaje);
+
+        if (rol === 'docente') {
+          this.router.navigate(['/docente']);
+        } else if (rol === 'alumno') {
+          this.router.navigate(['/alumno']);
+        }
+      }
     } catch (error) {
-      this.mensaje = 'Error al validar usuario';
+      console.error('Error registrando al usuario:', error);
+      this.error = this.authService.GenError(error);
+      this.mensaje = this.error;
       await this.mostrarMensaje('Error', this.mensaje);
-      return true;
+      this.cargando = false;
     }
   }
 
@@ -79,9 +74,5 @@ export class RegistrarsePage implements OnInit {
     });
     await alert.present();
   }
-
-  constructor() { }
-
-  ngOnInit() { }
 
 }

@@ -1,6 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { UsuarioAPI } from 'src/app/models/usuarioAPI.models';
-import { AuthService } from 'src/app/servicios/auth.service';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/firebase/auth.service';
 
 @Component({
   selector: 'app-pie',
@@ -8,20 +8,19 @@ import { AuthService } from 'src/app/servicios/auth.service';
   styleUrls: ['./pie.component.scss'],
 })
 export class PieComponent  implements OnInit {
+  user: any = null;
 
-  usuario: string;
-  private authService = inject(AuthService);
-
-  usuarioCompleto: UsuarioAPI;
-
-  constructor() { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.authService.usuario$.subscribe(usuario => { this.usuario = usuario; });
-
-    this.authService.usuarioCompleto$.subscribe(usuarioCompleto => {
-      this.usuarioCompleto = usuarioCompleto;
+    this.authService.authState$.subscribe((userData) => {
+      this.user = userData;
     });
+   }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/iniciar-sesion']);
   }
 
 }

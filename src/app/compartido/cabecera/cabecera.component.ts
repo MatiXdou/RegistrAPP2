@@ -1,26 +1,14 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { AuthService } from 'src/app/servicios/auth.service';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-cabecera',
   templateUrl: './cabecera.component.html',
   styleUrls: ['./cabecera.component.scss'],
 })
-export class CabeceraComponent  implements OnInit, OnDestroy {
-  usuario: string;
-  private authService = inject(AuthService);
-  subscriptionsAuthService: Subscription;
+export class CabeceraComponent  implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-    this.subscriptionsAuthService = this.authService.usuario$.subscribe(usuario => {
-      this.usuario = usuario;
-    });
-  }
+  ngOnInit() { }
 
-  ngOnDestroy() {
-    this.subscriptionsAuthService?.unsubscribe();
-  }
 }

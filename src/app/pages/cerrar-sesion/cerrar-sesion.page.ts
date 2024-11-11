@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/servicios/auth.service';
+import { AuthService } from 'src/app/firebase/auth.service';
 
 @Component({
   selector: 'app-cerrar-sesion',
@@ -12,7 +12,7 @@ export class CerrarSesionPage implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.authService.cerrarSesion();
+    this.authService.logout();
   }
 
 }

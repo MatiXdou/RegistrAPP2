@@ -6,17 +6,22 @@
 
   <h1 style="text-align: center">Iniciar Sesión</h1>
 
+
   <ion-list [inset]="true">
     <ion-item color="light">
-      <ion-input [(ngModel)]="usuario" type="text" label="Usuario: " labelPlacement="floating" [clearInput]="true" placeholder="Ingrese su usuario"></ion-input>
+      <ion-input [(ngModel)]="email" type="email" label="Correo: " labelPlacement="floating" [clearInput]="true" placeholder="Ingrese su correo"></ion-input>
     </ion-item>
     <ion-item color="light">
-      <ion-input [(ngModel)]="contra" type="password" label="Contraseña: " labelPlacement="floating" [clearInput]="true" [clearOnEdit]="false" placeholder="Ingrese su contraseña"></ion-input>
+      <ion-input [(ngModel)]="password" type="password" label="Contraseña: " labelPlacement="floating" [clearInput]="true" [clearOnEdit]="false" placeholder="Ingrese su contraseña"></ion-input>
     </ion-item>
   </ion-list>
 
   <div class="ion-text-center">
-    <ion-button (click)="inicioSesion(usuario, contra)" size="default" fill="outline" shape="round" [disabled]="!usuario || !contra">Iniciar Sesión</ion-button>
+    <ion-button (click)="login()" size="default" fill="outline" shape="round" type="submit" [disabled]="!email || !password">Iniciar Sesión</ion-button>
+  </div>
+
+  <div class="ion-text-center" style="margin: 20px 0 0 0;">
+      <ion-button (click)="loginWithGoogle()" size="default">Iniciar sesión con Google</ion-button>
   </div>
 
 </ion-content>

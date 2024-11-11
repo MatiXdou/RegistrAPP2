@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { authGuard } from './guard/auth.guard';
-import { redirectIfAuthGuard } from './guard/redirect-if-auth.guard';
+import { AuthGuard } from './guards/auth.guard';
+import { RedirectIfAuthGuard } from './guards/redirect-if-auth.guard';
 
 const routes: Routes = [
   {
     path: 'alumno',
     loadChildren: () => import('./pages/alumno/alumno.module').then( m => m.AlumnoPageModule),
-    canActivate: [authGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'asistencia/:codigo/:usuario/:fecha',
@@ -16,17 +16,17 @@ const routes: Routes = [
   {
     path: 'cerrar-sesion',
     loadChildren: () => import('./pages/cerrar-sesion/cerrar-sesion.module').then( m => m.CerrarSesionPageModule),
-    canActivate: [authGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'docente',
     loadChildren: () => import('./pages/docente/docente.module').then( m => m.DocentePageModule),
-    canActivate: [authGuard]
+    canActivate: [AuthGuard]
   },
   {
     path: 'iniciar-sesion',
     loadChildren: () => import('./pages/iniciar-sesion/iniciar-sesion.module').then( m => m.IniciarSesionPageModule),
-    canActivate: [redirectIfAuthGuard]
+    canActivate: [RedirectIfAuthGuard]
   },
   {
     path: 'inicio',

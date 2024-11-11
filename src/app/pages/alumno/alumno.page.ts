@@ -1,11 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/firebase/auth.service';
 
 @Component({
   selector: 'app-alumno',
   templateUrl: './alumno.page.html',
   styleUrls: ['./alumno.page.scss'],
 })
-export class AlumnoPage implements OnInit {
+export class AlumnoPage implements OnInit, OnDestroy {
+  nombreUsuario: string = '';
+  private userSubscription: Subscription | null = null;
 
   asignaturas = [
     { nombre: 'DISEÑO Y GESTIÓN DE REQUISITOS', id: 'PRY1111' },
@@ -17,9 +21,20 @@ export class AlumnoPage implements OnInit {
     { nombre: 'PROCESO DE PORTAFOLIO', id: 'APY4478' },
   ];
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
+    this.userSubscription = this.authService.authState$.subscribe((usuario) => {
+      if (usuario && usuario.name) {
+        this.nombreUsuario = usuario.name;
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
   }
 
 }

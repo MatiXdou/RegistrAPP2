@@ -2,18 +2,7 @@
   <ion-toolbar>
     <ion-tabs>
       <ion-tab-bar slot="bottom">
-        @if (usuario) {
-          @if (usuarioCompleto.rol === 'docente') {
-            <ion-tab-button [routerLink]="['/docente']">
-              <ion-label>Docente</ion-label>
-              <ion-ripple-effect></ion-ripple-effect>
-            </ion-tab-button>
-          } @else {
-            <ion-tab-button [routerLink]="['/alumno']">
-              <ion-label>Alumno</ion-label>
-              <ion-ripple-effect></ion-ripple-effect>
-            </ion-tab-button>
-          }
+        @if(user){
           <ion-tab-button [routerLink]="['/cerrar-sesion']">
             <ion-label>Cerrar Sesión</ion-label>
             <ion-ripple-effect></ion-ripple-effect>
@@ -28,6 +17,8 @@
             <ion-ripple-effect></ion-ripple-effect>
           </ion-tab-button>
         }
+
+
       </ion-tab-bar>
     </ion-tabs>
   </ion-toolbar>

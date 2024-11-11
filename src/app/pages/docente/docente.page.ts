@@ -1,12 +1,18 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/firebase/auth.service';
+
 
 @Component({
   selector: 'app-docente',
   templateUrl: './docente.page.html',
   styleUrls: ['./docente.page.scss'],
 })
-export class DocentePage implements OnInit {
+export class DocentePage implements OnInit, OnDestroy {
+  nombreUsuario: string = '';
+
+  private userSubscription: Subscription | null = null;
   private router = inject(Router);
 
   asignaturas = [
@@ -23,8 +29,20 @@ export class DocentePage implements OnInit {
     this.router.navigate([`/mostrar-qr/${asignaturaId}/${asignaturaNombre}`]);
   }
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.userSubscription = this.authService.authState$.subscribe((usuario) => {
+      if (usuario && usuario.name) {
+        this.nombreUsuario = usuario.name;
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+  }
 
 }
